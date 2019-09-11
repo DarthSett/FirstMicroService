@@ -1,0 +1,57 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+    networks:
+      - internal
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+  database:
+    image: mysql:8.0
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: "mslinks"
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    networks:
+      - internal
+
+  uploader:
+    build:
+      context: .
+      dockerfile: ./CsvService/Dockerfile
+    image: csv-uploader
+    restart: on-failure
+    ports:
+      - 4000:4000
+    depends_on:
+      - database
+    networks:
+      - internal
+  scraper:
+
+    build:
+      context: .
+      dockerfile: ./ScraperService/Dockerfile
+    image: product-scraper
+    restart: on-failure
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal
+networks:
+  internal:
+    driver: "bridge"

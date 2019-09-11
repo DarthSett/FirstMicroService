@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uploader
+spec:
+  selector:
+    app: firstMS
+  type: NodePort
+  ports:
+    - name: uploader
+      port: 4000

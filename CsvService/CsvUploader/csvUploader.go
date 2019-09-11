@@ -42,7 +42,7 @@ func Csvupload(c *gin.Context) {
 func dbInsert(links []string) {
 	db := rConnect()
 	for _, l := range links {
-		q := fmt.Sprintf("INSERT into Link values ('%s','unscraped','0','%s')", l,time.Now().Format("2006-01-02 15:04:05"))
+		q := fmt.Sprintf("INSERT into Link values ('%s','unscraped','%s','0')", l,time.Now().Format("2006-01-02 15:04:05"))
 
 		_, err := db.Query(q)
 		FailOnError(err, "Failed to insert values into table")

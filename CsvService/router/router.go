@@ -22,7 +22,7 @@ func (r *Router) Router() {
 }
 
 func (r *Router) status(c *gin.Context) {
-	row, err := r.db.Query("select * from Link")
+	row, err := r.db.Query("select link,status from Link")
 	if err != nil {
 		CsvUploader.FailOnError(err, "Failed to fetch the status from db: ")
 	}
@@ -36,6 +36,25 @@ func (r *Router) status(c *gin.Context) {
 		err := row.Scan(&link, &status)
 		CsvUploader.FailOnError(err, "Failed to scan the values")
 		m[link] = status
+	}
+	c.JSON(200, m)
+}
+
+func (r *Router) archive(c *gin.Context) {
+	row, err := r.db.Query("select link,archived from Link")
+	if err != nil {
+		CsvUploader.FailOnError(err, "Failed to fetch the archive info from db: ")
+	}
+	m := make(map[string]int)
+	defer row.Close()
+	var (
+		link   string
+		archived int
+	)
+	for row.Next() {
+		err := row.Scan(&link, &archived)
+		CsvUploader.FailOnError(err, "Failed to scan the values")
+		m[link] = archived
 	}
 	c.JSON(200, m)
 }

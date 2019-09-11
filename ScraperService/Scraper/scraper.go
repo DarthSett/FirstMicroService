@@ -20,11 +20,10 @@ func Scrape(db *sql.DB) {
 	println("links fetched")
 	client := http.Client{Timeout: 30 * time.Second}
 	link := ""
-	status := ""
 	println("Entering loop")
 	for row.Next() {
 
-		err := row.Scan(&link, &status)
+		err := row.Scan(&link)
 		FailOnError(err, "Failed to scan the fetched row")
 
 		//res, err := http.Get(link)
@@ -103,7 +102,7 @@ func dbInsert(db *sql.DB, title string, price float64, seller string) {
 
 func dbGetLink(db *sql.DB) *sql.Rows {
 	println("getting links")
-	row, err := db.Query("select * from Link where status = 'unscraped'")
+	row, err := db.Query("select Link from Link where status = 'unscraped' AND archived = '0' ")
 	FailOnError(err, "Failed to fetch links from db")
 	return row
 }

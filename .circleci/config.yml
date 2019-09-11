@@ -15,14 +15,14 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker login --username=darthsett --password=$HDOCKER_PASS
+      - run: docker login --username=darthsett --password=$DOCKER_PASS
       - run: docker tag csv-uploader darthsett/csv-uploader:latest
       - run: docker tag product-scraper darthsett/product-scraper:latest
       - run: docker push darthsett/csv-uploader
       - run: docker push darthsett/product-scraper
 workflows:
   version: 2
-  build_and_printer:
+  build_and_deploy:
     jobs:
       - build
-      - printer
+      - deploy

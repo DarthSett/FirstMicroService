@@ -12,7 +12,8 @@ jobs:
       - run: go test ./ScraperService/Scraper
 
   deploy:
-    machine: true
+#    docker:
+#      - image: circleci/golang:1.12
     steps:
       - checkout
       - setup_remote_docker:

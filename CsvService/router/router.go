@@ -16,7 +16,8 @@ func NewRouter(db *sql.DB) *Router {
 
 func (r *Router) Router() {
 	s := gin.Default()
-	s.GET("/", r.status)
+	s.GET("/status", r.status)
+	s.GET("/archive",r.archive)
 	s.POST("/upload", CsvUploader.Csvupload)
 	s.Run(":4000")
 }

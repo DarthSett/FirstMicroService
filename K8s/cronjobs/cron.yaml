@@ -18,7 +18,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - mysql -h 10.111.158.57 --user=root --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --execute="update Link set archived = '1' where date_created < NOW()"
+                - mysql -h database --user=root --password=$MYSQL_ROOT_PASSWORD --database=$MYSQL_DATABASE --execute="update Link set archived = '1' where DATEDIFF( NOW( ) ,  created ) >=7"
               env:
                 - name: MYSQL_ROOT_PASSWORD
                   value: password

@@ -22,7 +22,6 @@ func main() {
 	scraper.FailOnError(err, "Can't connect to db")
 	println("@@@@ DB Connected")
 	defer db.Close()
-	err = nil
 
 	println("calling rconnect")
 	conn := rConnect()

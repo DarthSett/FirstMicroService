@@ -1,4 +1,4 @@
-# FirstMicroService
+# FirstMicroService[![Go Report Card](https://goreportcard.com/badge/github.com/DarthSett/Restaurant)](https://goreportcard.com/report/github.com/DarthSett/FirstMicroService) [![CircleCI](https://circleci.com/gh/DarthSett/FirstMicroService/tree/master.svg?style=svg)](https://circleci.com/gh/DarthSett/FirstMicroService/tree/master)
 
 This is an app consisting of two microservices communicating among each other running on seperate docker containers. Kubernetes config files are also available.
 

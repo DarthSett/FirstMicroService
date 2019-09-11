@@ -32,7 +32,7 @@ services:
     build:
       context: .
       dockerfile: ./CsvService/Dockerfile
-    image: csv-uploader
+    image: darthsett/csv-uploader
     restart: on-failure
     ports:
       - 4000:4000
@@ -45,7 +45,7 @@ services:
     build:
       context: .
       dockerfile: ./ScraperService/Dockerfile
-    image: product-scraper
+    image: darthsett/product-scraper
     restart: on-failure
     depends_on:
       - database

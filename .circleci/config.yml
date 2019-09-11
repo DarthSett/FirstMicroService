@@ -11,10 +11,15 @@ jobs:
       - run: go mod verify
       - run: go test ./ScraperService/Scraper
 
-  printer:
+  deploy:
     machine: true
     steps:
-      - run: echo "Running from Printer"
+      - checkout
+      - run: docker login --username=darthsett --password=$HDOCKER_PASS
+      - run: docker tag csv-uploader darthsett/csv-uploader:latest
+      - run: docker tag product-scraper darthsett/product-scraper:latest
+      - run: docker push darthsett/csv-uploader
+      - run: docker push darthsett/product-scraper
 workflows:
   version: 2
   build_and_printer:

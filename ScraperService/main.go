@@ -16,19 +16,16 @@ import (
 //	}
 //}
 
-
-
 func main() {
 	con := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true", "root", "password", "database", "3306", "mslinks")
 	db, err := sql.Open("mysql", con)
-	scraper.FailOnError(err,"Can't connect to db")
+	scraper.FailOnError(err, "Can't connect to db")
 	println("@@@@ DB Connected")
 	defer db.Close()
 	err = nil
 
-
 	println("calling rconnect")
-	conn:=rConnect()
+	conn := rConnect()
 	println("leaving rconnect")
 	defer conn.Close()
 
@@ -58,8 +55,10 @@ func main() {
 	scraper.FailOnError(err, "Failed to register a consumer")
 	println("calling rmigrate")
 	_ = rMigrate(db)
-	if err == nil {println("db migrated")}
-	scraper.FailOnError(err,"Can't migrate db")
+	if err == nil {
+		println("db migrated")
+	}
+	scraper.FailOnError(err, "Can't migrate db")
 
 	forever := make(chan string)
 
@@ -76,33 +75,28 @@ func main() {
 
 }
 
-func rConnect() *amqp.Connection{
+func rConnect() *amqp.Connection {
 
 	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
-	if err!=nil{
+	if err != nil {
 		println(err.Error())
 		println("trying to rc")
-		time.Sleep(5 *time.Second)
+		time.Sleep(5 * time.Second)
 		return rConnect()
 	}
 
 	return conn
 }
 
-func rMigrate(db *sql.DB) int{
+func rMigrate(db *sql.DB) int {
 
 	err := dump.MigrateDatabase(db)
 	if err != nil {
 		println(err.Error())
 		println("trying to reMigrate")
-		time.Sleep(5 *time.Second)
+		time.Sleep(5 * time.Second)
 		return rMigrate(db)
 	}
 
 	return 0
 }
-
-
-
-
-

@@ -15,10 +15,10 @@ import (
 func Csvupload(c *gin.Context) {
 
 	file, _, err := c.Request.FormFile("file")
-	FailOnError( err,"There was a problem while reading file: ")
+	FailOnError(err, "There was a problem while reading file: ")
 	defer file.Close()
 	first := true
-	c.Header("Content-type","text/plain")
+	c.Header("Content-type", "text/plain")
 	c.Writer.Write([]byte("file uploaded"))
 	reader := csv.NewReader(file)
 	var links []string
@@ -34,7 +34,6 @@ func Csvupload(c *gin.Context) {
 		links = append(links, record[0])
 	}
 
-
 	dbInsert(links)
 	sendSignal("CSV Uploaded")
 
@@ -42,10 +41,10 @@ func Csvupload(c *gin.Context) {
 
 func dbInsert(links []string) {
 	db := rConnect()
-	for _,l := range links {
-		q := fmt.Sprintf("INSERT into Link values ('%s','unscraped')",l)
+	for _, l := range links {
+		q := fmt.Sprintf("INSERT into Link values ('%s','unscraped')", l)
 
-		_,err := db.Query(q)
+		_, err := db.Query(q)
 		FailOnError(err, "Failed to insert values into table")
 		//if err != nil {
 		//	e ,ok := err.(*mysql.MySQLError)
@@ -62,12 +61,10 @@ func dbInsert(links []string) {
 	db.Close()
 }
 
-func sendSignal(body string){
+func sendSignal(body string) {
 	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
 	FailOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
-
-
 
 	ch, err := conn.Channel()
 
@@ -90,9 +87,9 @@ func sendSignal(body string){
 		false,  // mandatory
 		false,  // immediate
 		amqp.Publishing{
-			DeliveryMode:amqp.Persistent,
-			ContentType: "text/plain",
-			Body:        []byte(body),
+			DeliveryMode: amqp.Persistent,
+			ContentType:  "text/plain",
+			Body:         []byte(body),
 		})
 	log.Printf(" [x] Sent %s", body)
 	FailOnError(err, "Failed to publish a message")
@@ -104,13 +101,13 @@ func FailOnError(err error, msg string) {
 	}
 }
 
-func rConnect() *sql.DB{
+func rConnect() *sql.DB {
 	con := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true", "root", "password", "database", "3306", "mslinks")
 	db, err := sql.Open("mysql", con)
-	if err!=nil{
+	if err != nil {
 		println(err.Error())
 		println("trying to rc")
-		time.Sleep(5 *time.Second)
+		time.Sleep(5 * time.Second)
 		return rConnect()
 	}
 

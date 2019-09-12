@@ -15,7 +15,7 @@ func TestScrape(t *testing.T) {
 		panic(err)
 	}
 	client := http.Client{Timeout: 30 * time.Second}
-	req.Header.Set("User-Agent", "Not Firefox")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36")
 	res, err := client.Do(req)
 	if err != nil {
 		panic(err)

@@ -20,7 +20,7 @@ func TestScrape(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v",res.Body)
+	fmt.Printf("%v",string(res.Body))
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		panic(err)

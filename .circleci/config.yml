@@ -21,6 +21,7 @@ jobs:
       - run: docker login --username=darthsett --password=$DOCKER_PASS
       - run: docker-compose build
       - run: docker image ls
+      - run: docker system prune
       - run: docker push darthsett/csv-uploader
       - run: docker push darthsett/product-scraper
 workflows:

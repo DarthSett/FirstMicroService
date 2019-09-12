@@ -9,7 +9,7 @@ import (
 )
 
 func TestScrape(t *testing.T) {
-	link := "https://www.amazon.in/Power-Mens-Lionel-Running-Shoes/dp/B01FQXR2ME?pf_rd_p=4560c9eb-731c-49c7-bd28-5432424e2e3c&pd_rd_wg=65Spy&pf_rd_r=1NE5C8E8FHAXWP9B5J6C&ref_=pd_gw_unk&pd_rd_w=KFmjp&pd_rd_r=9644ad67-0f90-4ba4-9eb1-d17f2188c441"
+	link := "https://www.amazon.in/Korecall-KORUSB2-Phone-Recorder-Black/dp/B00N5TL0T8/ref=sr_1_1?qid=1568273090&s=electronics&sr=1-1"
 	req, err := http.NewRequest(http.MethodGet, link, nil)
 	if err != nil {
 		panic(err)
@@ -20,22 +20,21 @@ func TestScrape(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%v",string(res.Body))
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		panic(err)
 	}
 	t.Run("It scrapes the title properly", func(t *testing.T) {
 		title := titleScraper(doc)
-		AssertEqual(t, "Power Men's Lionel Running Shoes", title, "")
+		AssertEqual(t, "Korecall KORUSB2 2 line USB Phone Recorder (Black or White)", title, "")
 	})
 	t.Run("It scrapes the price properly", func(t *testing.T) {
 		price := priceScraper(doc)
-		AssertEqual(t, "1099.00", price, "")
+		AssertEqual(t, "4800.00", price, "")
 	})
 	t.Run("It scrapes the title properly", func(t *testing.T) {
 		seller := sellerScraper(doc)
-		AssertEqual(t, "Craftnation", seller, "")
+		AssertEqual(t, "Realtime Solutions", seller, "")
 	})
 }
 func AssertEqual(t *testing.T, expected interface{}, got interface{}, message string) {
